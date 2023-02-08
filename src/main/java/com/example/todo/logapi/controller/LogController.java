@@ -1,18 +1,20 @@
 package com.example.todo.logapi.controller;
 
 import com.example.todo.logapi.dto.request.LogCreateRqDto;
+import com.example.todo.logapi.dto.request.LogModifyRqDto;
 import com.example.todo.projectapi.dto.response.ProjectInfoRsDto;
 import com.example.todo.projectapi.service.ProjectService;
+import com.example.todo.todoapi.dto.request.TodoModifyRqDto;
+import com.example.todo.todoapi.dto.response.TodoListRsDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Slf4j
 @RestController
@@ -59,4 +61,39 @@ public class LogController {
         }
     }
 
+    // 할 일 수정요청 (PUT, PATCH)
+    @RequestMapping(
+            value = "/{id}"
+            , method = {RequestMethod.PUT, RequestMethod.PATCH}
+    )
+    public ResponseEntity<?> updateLog(
+            @AuthenticationPrincipal String userId
+            , @Validated @RequestBody LogModifyRqDto logModifyRqDto
+            , BindingResult result
+            , HttpServletRequest request
+    ) {
+        if (result.hasErrors()) {
+            return ResponseEntity.badRequest()
+                    .body(result.getFieldError());
+        }
+
+        log.info("/api/logs/{} {} request", logModifyRqDto.getLogId(), request.getMethod());
+        log.info("modifying dto : {}", logModifyRqDto);
+
+        try {
+            // TODO: 로그 상태 변경 메서드 생성
+//            TodoListRsDto responseDTO = logService.update(logModifyRqDto, userId);
+            ProjectInfoRsDto rsDto = projectService.getProjectDetails(logModifyRqDto.getProjectId());
+
+            return ResponseEntity.ok().body(rsDto);
+
+        } catch (Exception e) {
+            ProjectInfoRsDto rsDto = projectService.getProjectDetails(logModifyRqDto.getProjectId());
+            rsDto.setErrorMsg(e.getMessage());
+
+            return ResponseEntity
+                    .internalServerError()
+                    .body(rsDto);
+        }
+    }
 }
