@@ -1,6 +1,7 @@
 package com.example.todo.projectapi.dto.request;
 
 import com.example.todo.projectapi.entity.ProjectEntity;
+import com.example.todo.userapi.dto.request.UserIdNameRqDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
@@ -17,12 +18,14 @@ public class ProjectCreateRqDto {
 
     private String projectTitle;
     private String projectContent;
-    private List<String> userIdList = new ArrayList<>();
+    private String userId;
+    private List<UserIdNameRqDto> userList = new ArrayList<>();
 
     public ProjectEntity toEntity(){
         return ProjectEntity.builder()
-                .title(projectTitle)
-                .contents(projectContent)
+                .userId(this.userId)
+                .title(this.projectTitle)
+                .contents(this.projectContent)
                 .build();
     }
 }

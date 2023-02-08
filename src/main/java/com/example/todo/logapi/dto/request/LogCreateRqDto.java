@@ -15,12 +15,14 @@ public class LogCreateRqDto {
     private String logTitle;
     private String logContent;
     private String todoId;
+    private String userId;
 
     public LogEntity toEntity(){
         return LogEntity.builder()
-                .title(logTitle)
-                .contents(logContent)
-                .todoId(todoId)
+                .userId(this.userId)
+                .title(this.logTitle)
+                .contents(this.logContent)
+                .todoId(this.todoId)
                 .build();
     }
 }
