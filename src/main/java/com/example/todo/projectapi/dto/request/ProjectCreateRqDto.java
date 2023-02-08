@@ -16,7 +16,7 @@ public class ProjectCreateRqDto {
     private String projectTitle;
     private String projectContent;
     private String userId;
-    private List<UserIdNameRqDto> userList = new ArrayList<>();
+    private List<UserIdNameEmailRqDto> userList = new ArrayList<>();
 
     public ProjectEntity toEntity(){
         return ProjectEntity.builder()

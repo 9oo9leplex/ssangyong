@@ -7,7 +7,8 @@ import lombok.*;
 @AllArgsConstructor
 @EqualsAndHashCode
 @Builder
-public class UserIdNameRqDto {
+public class UserIdNameEmailRqDto {
     private String userId;
     private String userName;
+    private String email;
 }
