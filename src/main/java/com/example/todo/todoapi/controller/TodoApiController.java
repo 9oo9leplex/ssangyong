@@ -1,5 +1,7 @@
 package com.example.todo.todoapi.controller;
 
+import com.example.todo.projectapi.dto.response.ProjectInfoRsDto;
+import com.example.todo.projectapi.service.ProjectService;
 import com.example.todo.todoapi.dto.request.TodoCreateRqDto;
 import com.example.todo.todoapi.dto.request.TodoModifyRqDto;
 import com.example.todo.todoapi.dto.response.TodoListRsDto;
@@ -23,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 public class TodoApiController {
 
     private final TodoService todoService;
+    private final ProjectService projectService;
 
     // 할 일 등록 요청
     @PostMapping
@@ -40,15 +43,23 @@ public class TodoApiController {
         }
 
         try {
+            // TODO: 2023.2.8. Todo Controller create 작업
             TodoListRsDto responseDTO = todoService.create(requestDTO, userId);
+            ProjectInfoRsDto rsDto = projectService.getProjectDetails(requestDTO.getProjectId());
+
             return ResponseEntity
                     .ok()
-                    .body(responseDTO);
+                    .body(rsDto);
+
         } catch (RuntimeException e) {
             log.error(e.getMessage());
+
+            ProjectInfoRsDto rsDto = projectService.getProjectDetails(requestDTO.getProjectId());
+            rsDto.setErrorMsg(e.getMessage());
+
             return ResponseEntity
                     .internalServerError()
-                    .body(TodoListRsDto.builder().error(e.getMessage()));
+                    .body(rsDto);
         }
 
     }

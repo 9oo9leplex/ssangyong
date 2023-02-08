@@ -28,4 +28,6 @@ public class ProjectInfoRsDto {
 
     private List<TodoRsDto> todos;
 
+    private String errorMsg;
+
 }

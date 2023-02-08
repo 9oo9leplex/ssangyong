@@ -11,6 +11,7 @@ import lombok.*;
 @Builder
 public class LogCreateRqDto {
 
+    private String projectId;
     private String logTitle;
     private String logContent;
     private String todoId;

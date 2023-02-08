@@ -32,6 +32,9 @@ public class TodoEntity {
     @Column(nullable = false, length = 30)
     private String title; // 제목
 
+    @Column(nullable = false, length = 30)
+    private String contents; // 내용
+
     private boolean done; // 일정 완료 여부
 
     @CreationTimestamp
