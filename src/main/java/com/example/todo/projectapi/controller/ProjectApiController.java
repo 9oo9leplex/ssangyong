@@ -2,6 +2,7 @@ package com.example.todo.projectapi.controller;
 
 import com.example.todo.projectapi.dto.request.ProjectCreateRqDto;
 import com.example.todo.projectapi.dto.response.ProjectListRsDto;
+import com.example.todo.projectapi.dto.response.UserIdNameListRsDto;
 import com.example.todo.projectapi.service.ProjectService;
 import com.example.todo.userapi.entity.UserProjectEntity;
 import lombok.RequiredArgsConstructor;
@@ -91,6 +92,29 @@ public class ProjectApiController {
                     .notFound()
                     .build();
         }
+    }
+
+    @GetMapping("/userlist")
+    public ResponseEntity<?> retrieveAllUser(
+        @AuthenticationPrincipal String userId
+    ){
+        log.info("project controller retrieve all user method");
+        try {
+            // TODO: 전체 유저 조회 메서드 구현
+//            List<UserIdNameListRsDto> list = projectService.retrieveAllUser();
+            List<UserIdNameListRsDto> list = null;
+            return ResponseEntity
+                    .ok()
+                    .body(list);
+
+        } catch(RuntimeException e){
+            log.error(e.getMessage());
+            return ResponseEntity
+                    .badRequest()
+                    .body(UserIdNameListRsDto.builder().errorMsg(e.getMessage()).build());
+        }
+
+
     }
 
 }

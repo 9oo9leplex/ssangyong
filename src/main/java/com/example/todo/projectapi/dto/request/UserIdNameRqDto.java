@@ -1,4 +1,4 @@
-package com.example.todo.userapi.dto.request;
+package com.example.todo.projectapi.dto.request;
 
 import lombok.*;
 
