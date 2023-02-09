@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 
 @Setter @Getter @ToString
 @NoArgsConstructor
@@ -20,6 +21,7 @@ public class TodoCreateRqDto {
     private String projectId;
     private String userId;
 
+
     // 이 dto를 엔터티로 변환
     public TodoEntity toEntity() {
         return TodoEntity.builder()
@@ -27,6 +29,7 @@ public class TodoCreateRqDto {
                 .title(this.title)
                 .contents(this.content)
                 .projectId(this.projectId)
+                .logs(new ArrayList<>())
                 .build();
     }
 

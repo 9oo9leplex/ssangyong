@@ -44,7 +44,7 @@ public class TodoApiController {
 
         try {
             // TODO: 2023.2.8. Todo Controller create 작업
-            TodoListRsDto responseDTO = todoService.create(requestDTO, userId);
+            todoService.create(requestDTO, userId);
             ProjectInfoRsDto rsDto = projectService.getProjectDetails(requestDTO.getProjectId());
 
             return ResponseEntity
