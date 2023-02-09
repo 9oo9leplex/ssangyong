@@ -3,6 +3,7 @@ package com.example.todo.projectapi.dto.request;
 import com.example.todo.projectapi.entity.ProjectEntity;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +24,8 @@ public class ProjectCreateRqDto {
                 .userId(this.userId)
                 .title(this.projectTitle)
                 .contents(this.projectContent)
+                .done(false)
+                .createDate(LocalDateTime.now())
                 .build();
     }
 }

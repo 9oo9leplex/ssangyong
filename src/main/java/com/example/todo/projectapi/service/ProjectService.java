@@ -3,6 +3,8 @@ package com.example.todo.projectapi.service;
 
 import com.example.todo.logapi.dto.response.LogRsDto;
 import com.example.todo.logapi.entity.LogEntity;
+import com.example.todo.projectapi.dto.request.ProjectCreateRqDto;
+import com.example.todo.projectapi.dto.request.UserIdNameEmailRqDto;
 import com.example.todo.projectapi.dto.response.ProjectInfoRsDto;
 import com.example.todo.projectapi.dto.response.ProjectDetailRsDto;
 import com.example.todo.projectapi.dto.response.ProjectListRsDto;
@@ -19,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -142,5 +145,43 @@ public class ProjectService {
     }
 
 
+    public ProjectListRsDto createProject(ProjectCreateRqDto projectCreateDTO){
 
+        ProjectEntity newProject = projectCreateDTO.toEntity();
+        UserEntity user = userRepository.findById(projectCreateDTO.getUserId()).orElseThrow();
+        newProject.setUser(user);
+
+        ProjectEntity save = projectRepository.save(newProject);
+
+        // 조회 유저 없을시 예외처리 수행행함 // 멤버가 없을때,
+
+        List<UserProjectEntity> userProjects = new ArrayList<>();
+
+        for(UserIdNameEmailRqDto userIdDto : projectCreateDTO.getUserList()){
+
+            //
+            UserEntity member = userRepository.findById(userIdDto.getUserId()).orElseThrow();
+            UserProjectEntity userProjectEntity = UserProjectEntity.builder()
+                    .project(newProject)
+                    .user(member)
+                    .build();
+            userProjectRepository.save(userProjectEntity);
+            userProjects.add(userProjectEntity);
+        }
+
+        // 작성자 본인을 멤버에 추가해야함
+        UserProjectEntity userProjectEntity2 = UserProjectEntity.builder()
+                .project(newProject)
+                .user(user)
+                .build();
+        userProjectRepository.save(userProjectEntity2);
+        userProjects.add(userProjectEntity2);
+
+        newProject.setUserProjects(userProjects);
+        projectRepository.save(newProject);
+
+        return getCurrentUserProjectInfo(projectCreateDTO.getUserId());
     }
+
+
+}
