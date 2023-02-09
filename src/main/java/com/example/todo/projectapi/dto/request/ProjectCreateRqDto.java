@@ -26,6 +26,7 @@ public class ProjectCreateRqDto {
                 .contents(this.projectContent)
                 .done(false)
                 .createDate(LocalDateTime.now())
+                .todos(new ArrayList<>())
                 .build();
     }
 }
