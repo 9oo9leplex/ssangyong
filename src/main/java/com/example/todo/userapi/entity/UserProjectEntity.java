@@ -3,6 +3,7 @@ package com.example.todo.userapi.entity;
 
 import com.example.todo.projectapi.entity.ProjectEntity;
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
@@ -16,8 +17,9 @@ import javax.persistence.*;
 @Table(name = "tbl_user_project")
 public class UserProjectEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(generator = "system-uuid")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid")
+    private String id;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

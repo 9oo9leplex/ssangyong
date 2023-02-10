@@ -10,6 +10,6 @@ import lombok.*;
 public class LogModifyRqDto {
 
     private String logId;
-    private boolean logStatus;
+//    private boolean logStatus;
     private String projectId;
 }

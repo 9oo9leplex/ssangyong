@@ -1,6 +1,7 @@
 package com.example.todo.projectapi.controller;
 
 import com.example.todo.projectapi.dto.request.ProjectCreateRqDto;
+import com.example.todo.projectapi.dto.response.ProjectInfoRsDto;
 import com.example.todo.projectapi.dto.response.ProjectListRsDto;
 import com.example.todo.projectapi.dto.response.UserIdNameEmailListRsDto;
 import com.example.todo.projectapi.service.ProjectService;
@@ -58,8 +59,8 @@ public class ProjectApiController {
         // TODO: 2023.2.8. Project Controller create 작업
         // create 메서드 내에서 return 하도록
         // rqDto userIdList 필드는 service 단에서 1개씩 db 넣기
-//            ProjectListRsDto rsDto = projectService.create(rqDto);
-            ProjectListRsDto rsDto = null;
+            ProjectListRsDto rsDto = projectService.createProject(rqDto,userId);
+//            ProjectListRsDto rsDto = null;
             return ResponseEntity
                     .ok()
                     .body(rsDto);
@@ -72,7 +73,7 @@ public class ProjectApiController {
 
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{projectId}")
     public ResponseEntity<?> retrieveProject(
             @AuthenticationPrincipal String userId,
             @PathVariable String projectId
@@ -80,8 +81,8 @@ public class ProjectApiController {
 
         try {
 
-//            ProjectListRsDto rsDto = projectService.findById(projectId);
-            ProjectListRsDto rsDto = null;
+            ProjectInfoRsDto rsDto = projectService.getProjectDetails(projectId);
+//            ProjectListRsDto rsDto = null;
             return ResponseEntity
                     .ok()
                     .body(rsDto);

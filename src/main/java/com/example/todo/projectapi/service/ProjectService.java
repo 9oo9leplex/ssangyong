@@ -1,6 +1,7 @@
 package com.example.todo.projectapi.service;
 
 
+import com.example.todo.logapi.dto.request.LogModifyRqDto;
 import com.example.todo.logapi.dto.response.LogRsDto;
 import com.example.todo.logapi.entity.LogEntity;
 import com.example.todo.projectapi.dto.request.ProjectCreateRqDto;
@@ -23,7 +24,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -105,8 +108,11 @@ public class ProjectService {
         }
 
         List<TodoRsDto> todos = new ArrayList<>();
+        boolean todosStatus = true;
+
         for(TodoEntity todoEntity : projectEntity.getTodos()){
             List<LogRsDto> logs = new ArrayList<>();
+            boolean logsStatus= true;
             for(LogEntity logEntity : todoEntity.getLogs()){
                 LogRsDto logDto = LogRsDto.builder()
                         .logId(logEntity.getLogId())
@@ -117,17 +123,32 @@ public class ProjectService {
                         .userName(logEntity.getUser().getUserName())
                         .build();
                 logs.add(logDto);
+                
+                // logStatus 비교해서 false;
+                logsStatus &= logEntity.isDone();
             }
+
+            if(logs.size() == 0) logsStatus = false;
 
             TodoRsDto todoDto = TodoRsDto.builder()
                     .todoId(todoEntity.getTodoId())
                     .title(todoEntity.getTitle())
                     .createDate(todoEntity.getCreateDate())
-                    .done(todoEntity.isDone())
+//                    .done(todoEntity.isDone())
+                    .done(logsStatus)
                     .userName(todoEntity.getUser().getUserName())
                     .logs(logs)
                     .build();
             todos.add(todoDto);
+
+            todosStatus &= logsStatus;
+        }
+
+        // Todo: 프로젝트 상태 업데이트
+//        if(todosStatus) update(project);
+        if((projectEntity.isDone() && !todosStatus) || (!projectEntity.isDone() && todosStatus)) {
+            projectEntity.setDone(!projectEntity.isDone());
+            projectRepository.save(projectEntity);
         }
 
         ProjectInfoRsDto resultDto = ProjectInfoRsDto.builder()
@@ -141,14 +162,16 @@ public class ProjectService {
                 .todos(todos)
                 .build();
 
+        log.info("********project info - {}",resultDto);
+
         return resultDto;
     }
 
-
-    public ProjectListRsDto createProject(ProjectCreateRqDto projectCreateDTO){
+    public ProjectListRsDto createProject(ProjectCreateRqDto projectCreateDTO, String userId){
 
         ProjectEntity newProject = projectCreateDTO.toEntity();
-        UserEntity user = userRepository.findById(projectCreateDTO.getUserId()).orElseThrow();
+//        UserEntity user = userRepository.findById(projectCreateDTO.getUserId()).orElseThrow();
+        UserEntity user = userRepository.findById(userId).orElseThrow();
         newProject.setUser(user);
 
         ProjectEntity save = projectRepository.save(newProject);
@@ -169,6 +192,9 @@ public class ProjectService {
             userProjects.add(userProjectEntity);
         }
 
+        log.info("newProject - {}", newProject);
+        log.info("user - {}", user);
+
         // 작성자 본인을 멤버에 추가해야함
         UserProjectEntity userProjectEntity2 = UserProjectEntity.builder()
                 .project(newProject)
@@ -180,7 +206,8 @@ public class ProjectService {
         newProject.setUserProjects(userProjects);
         projectRepository.save(newProject);
 
-        return getCurrentUserProjectInfo(projectCreateDTO.getUserId());
+//        return getCurrentUserProjectInfo(projectCreateDTO.getUserId());
+        return getCurrentUserProjectInfo(userId);
     }
 
 

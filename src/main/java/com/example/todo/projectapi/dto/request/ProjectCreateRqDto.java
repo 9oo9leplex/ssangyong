@@ -16,12 +16,12 @@ public class ProjectCreateRqDto {
 
     private String projectTitle;
     private String projectContent;
-    private String userId;
+//    private String userId;
     private List<UserIdNameEmailRqDto> userList = new ArrayList<>();
 
     public ProjectEntity toEntity(){
         return ProjectEntity.builder()
-                .userId(this.userId)
+//                .userId(this.userId)
                 .title(this.projectTitle)
                 .contents(this.projectContent)
                 .done(false)

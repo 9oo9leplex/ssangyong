@@ -93,7 +93,7 @@ class ProjectRepositoryTest {
                     .todoId(todoEntity.getTodoId())
                     .title(todoEntity.getTitle())
                     .createDate(todoEntity.getCreateDate())
-                    .done(todoEntity.isDone())
+//                    .done(todoEntity.isDone())
                     .userName(todoEntity.getUser().getUserName())
                     .logs(logs)
                     .build();
