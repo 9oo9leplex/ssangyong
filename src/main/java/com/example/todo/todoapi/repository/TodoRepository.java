@@ -13,8 +13,8 @@ import java.util.List;
 public interface TodoRepository extends JpaRepository<TodoEntity, String> {
 
     // 완료되지 않은 할일들만 조회
-    @Query("select t from TodoEntity t where t.done=0")
-    List<TodoEntity> findNotYetTodos();
+//    @Query("select t from TodoEntity t where t.done=0")
+//    List<TodoEntity> findNotYetTodos();
 
     // 특정 회원의 할일 목록 조회
     List<TodoEntity> findByUserId(String userId);

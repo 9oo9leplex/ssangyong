@@ -29,8 +29,6 @@ public class TodoService {
 
     private final UserRepository userRepository;
 
-
-
     private final ProjectRepository projectRepository;
 
 
@@ -58,6 +56,7 @@ public class TodoService {
 
         UserEntity userEntity = userRepository.findById(userId).orElseThrow();
         todo.setUser(userEntity);
+        todo.setUserId(userEntity.getId());
         todoRepository.save(todo);
 
         ProjectEntity projectEntity = projectRepository.findById(createRequestDTO.getProjectId()).orElseThrow();
@@ -83,7 +82,7 @@ public class TodoService {
 
         targetEntity.ifPresent(entity -> {
             entity.setTitle(modifyRequestDTO.getTitle());
-            entity.setDone(modifyRequestDTO.isDone());
+//            entity.setDone(modifyRequestDTO.isDone());
 
             todoRepository.save(entity);
         });

@@ -2,6 +2,7 @@ package com.example.todo.logapi.controller;
 
 import com.example.todo.logapi.dto.request.LogCreateRqDto;
 import com.example.todo.logapi.dto.request.LogModifyRqDto;
+import com.example.todo.logapi.service.LogService;
 import com.example.todo.projectapi.dto.response.ProjectInfoRsDto;
 import com.example.todo.projectapi.service.ProjectService;
 import com.example.todo.todoapi.dto.request.TodoModifyRqDto;
@@ -22,7 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/api/logs")
 public class LogController {
 
-//    private final LogService logService;
+    private final LogService logService;
     private final ProjectService projectService;
 
     @PostMapping
@@ -43,7 +44,10 @@ public class LogController {
             // TODO: 2023.2.8. Log Controller create 작업
             // log create 시 return void
             // insert 예외 발생 시 catch로 빠짐
-//            logService.create(rqDto, userId);
+
+            log.info("user - {}", userId);
+
+            logService.create(rqDto, userId);
             rsDto = projectService.getProjectDetails(rqDto.getProjectId());
 
             return ResponseEntity
@@ -63,12 +67,12 @@ public class LogController {
 
     // 할 일 수정요청 (PUT, PATCH)
     @RequestMapping(
-            value = "/{id}"
-            , method = {RequestMethod.PUT, RequestMethod.PATCH}
+//            value = "/{id}",
+            method = {RequestMethod.PUT, RequestMethod.PATCH}
     )
     public ResponseEntity<?> updateLog(
             @AuthenticationPrincipal String userId
-            , @Validated @RequestBody LogModifyRqDto logModifyRqDto
+            , @Validated @RequestBody LogModifyRqDto rqDto
             , BindingResult result
             , HttpServletRequest request
     ) {
@@ -77,18 +81,18 @@ public class LogController {
                     .body(result.getFieldError());
         }
 
-        log.info("/api/logs/{} {} request", logModifyRqDto.getLogId(), request.getMethod());
-        log.info("modifying dto : {}", logModifyRqDto);
+        log.info("/api/logs/{} {} request", rqDto.getLogId(), request.getMethod());
+        log.info("modifying dto : {}", rqDto);
 
         try {
             // TODO: 로그 상태 변경 메서드 생성
-//            TodoListRsDto responseDTO = logService.update(logModifyRqDto, userId);
-            ProjectInfoRsDto rsDto = projectService.getProjectDetails(logModifyRqDto.getProjectId());
+            logService.update(rqDto);
+            ProjectInfoRsDto rsDto = projectService.getProjectDetails(rqDto.getProjectId());
 
             return ResponseEntity.ok().body(rsDto);
 
         } catch (Exception e) {
-            ProjectInfoRsDto rsDto = projectService.getProjectDetails(logModifyRqDto.getProjectId());
+            ProjectInfoRsDto rsDto = projectService.getProjectDetails(rqDto.getProjectId());
             rsDto.setErrorMsg(e.getMessage());
 
             return ResponseEntity

@@ -111,14 +111,14 @@ class TodoServiceTest {
 
         ProjectCreateRqDto projectCreateDTO = ProjectCreateRqDto.builder()
                 .projectTitle("t1")
-                .userId("402880af85f0876c0185f095d1280002")
+//                .userId("402880af85f0876c0185f095d1280002")
                 .projectContent("c1")
                 .userList(members)
                 .build();
 
         ProjectEntity newProject = projectCreateDTO.toEntity();
 
-        ProjectListRsDto project = projectService.createProject(projectCreateDTO);
+        ProjectListRsDto project = projectService.createProject(projectCreateDTO, "abcd");
 
 
 
@@ -131,7 +131,7 @@ class TodoServiceTest {
                 .content("todo1")
                 .projectId(targetProjectId)
                 .title("title1")
-                .userId("402880af85f0876c0185f095d1280002")
+//                .userId("402880af85f0876c0185f095d1280002")
                 .build();
 
         todoService.create(todo1,"402880af85f0876c0185f095d1280002");

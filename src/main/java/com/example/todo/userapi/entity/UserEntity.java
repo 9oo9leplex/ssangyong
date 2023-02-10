@@ -16,6 +16,7 @@ import java.util.List;
 @EqualsAndHashCode(of = "id")
 @Entity
 @Table(name = "tbl_user")
+@Builder
 public class UserEntity {
 
     @Id

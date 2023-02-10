@@ -24,7 +24,7 @@ public class TodoDetailRsDto {
     public TodoDetailRsDto(TodoEntity entity) {
         this.id = entity.getTodoId();
         this.title = entity.getTitle();
-        this.done = entity.isDone();
+//        this.done = entity.isDone();
         this.regDate = entity.getCreateDate();
     }
 }

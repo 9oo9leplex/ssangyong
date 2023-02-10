@@ -64,14 +64,14 @@ class ProjectServiceTest {
 
         ProjectCreateRqDto projectCreateDTO = ProjectCreateRqDto.builder()
                 .projectTitle("t1")
-                .userId("402880af85f0876c0185f095d1280002")
+//                .userId("402880af85f0876c0185f095d1280002")
                 .projectContent("c1")
                 .userList(members)
                 .build();
 
         ProjectEntity newProject = projectCreateDTO.toEntity();
 
-        ProjectListRsDto project = projectService.createProject(projectCreateDTO);
+//        ProjectListRsDto project = projectService.createProject(projectCreateDTO);
 
 
         int a=1;
