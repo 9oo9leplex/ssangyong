@@ -102,8 +102,9 @@ public class ProjectApiController {
         log.info("project controller retrieve all user method");
         try {
             // TODO: 전체 유저 조회 메서드 구현
-//            List<UserIdNameListRsDto> list = projectService.retrieveAllUser();
-            List<UserIdNameEmailListRsDto> list = null;
+            UserIdNameEmailListRsDto list = projectService.getUserNameEmailList();
+
+//            List<UserIdNameEmailListRsDto> list = null;
             return ResponseEntity
                     .ok()
                     .body(list);
