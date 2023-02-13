@@ -8,6 +8,7 @@ import com.example.todo.projectapi.dto.request.UserIdNameEmailRqDto;
 import com.example.todo.projectapi.dto.response.ProjectInfoRsDto;
 import com.example.todo.projectapi.dto.response.ProjectDetailRsDto;
 import com.example.todo.projectapi.dto.response.ProjectListRsDto;
+import com.example.todo.projectapi.dto.response.UserIdNameEmailListRsDto;
 import com.example.todo.projectapi.entity.ProjectEntity;
 import com.example.todo.projectapi.exceptions.ProjectNotFoundException;
 import com.example.todo.projectapi.repository.ProjectRepository;
@@ -183,5 +184,20 @@ public class ProjectService {
         return getCurrentUserProjectInfo(projectCreateDTO.getUserId());
     }
 
+    public UserIdNameEmailListRsDto getUserNameEmailList(){
 
+        List<UserEntity> entityList = userRepository.findAll();
+        ArrayList<UserIdNameEmailRqDto> userIdNameEmailList = new ArrayList<>();
+        for(UserEntity e : entityList){
+            UserIdNameEmailRqDto item = UserIdNameEmailRqDto.builder()
+                    .email(e.getEmail())
+                    .userId(e.getId())
+                    .userName(e.getUserName())
+                    .build();
+            userIdNameEmailList.add(item);
+        }
+        return UserIdNameEmailListRsDto.builder()
+                .list(userIdNameEmailList)
+                .build();
+    }
 }

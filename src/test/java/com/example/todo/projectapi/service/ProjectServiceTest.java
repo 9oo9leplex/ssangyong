@@ -4,6 +4,7 @@ import com.example.todo.projectapi.dto.request.ProjectCreateRqDto;
 import com.example.todo.projectapi.dto.request.UserIdNameEmailRqDto;
 import com.example.todo.projectapi.dto.response.ProjectInfoRsDto;
 import com.example.todo.projectapi.dto.response.ProjectListRsDto;
+import com.example.todo.projectapi.dto.response.UserIdNameEmailListRsDto;
 import com.example.todo.projectapi.entity.ProjectEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -77,6 +78,15 @@ class ProjectServiceTest {
         int a=1;
 
 
+    }
+
+    @Test
+    @DisplayName("userIdNameEmailList")
+    @Transactional
+    @Rollback
+    void test4(){
+        UserIdNameEmailListRsDto result = projectService.getUserNameEmailList();
+        int a=1;
     }
 
 }
