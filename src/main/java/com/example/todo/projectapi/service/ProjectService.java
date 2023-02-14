@@ -134,6 +134,7 @@ public class ProjectService {
             TodoRsDto todoDto = TodoRsDto.builder()
                     .todoId(todoEntity.getTodoId())
                     .title(todoEntity.getTitle())
+                    .content(todoEntity.getContents())
                     .createDate(todoEntity.getCreateDate())
 //                    .done(todoEntity.isDone())
                     .done(logsStatus)
