@@ -20,6 +20,8 @@ public class TodoRsDto {
 
     private String title;
 
+    private String content;
+
     private boolean done;
 
     private LocalDateTime createDate;
