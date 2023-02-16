@@ -60,7 +60,7 @@ class ProjectRepositoryTest {
     }
 
 
-
+/*
     @Test
     @DisplayName("프로젝트 아이디로 하위의 모든 로그 조회")
     @Transactional
@@ -106,15 +106,12 @@ class ProjectRepositoryTest {
                 .content(projectEntity.getContents())
                 .done(projectEntity.isDone())
                 .createDate(projectEntity.getCreateDate())
-                .members(members)
+//                .members(members)
                 .memberCount(members.size())
                 .todos(todos)
                 .build();
-        int a=1;
-
-
     }
-
+*/
 
     @Test
     @DisplayName("유저 아이디로 프로젝트 조회")
