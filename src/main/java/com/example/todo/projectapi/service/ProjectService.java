@@ -68,20 +68,33 @@ public class ProjectService {
 
         for(ProjectEntity e : userProjectList){
 
-            List<String> members = new ArrayList<>();
+            List<UserIdNameEmailRqDto> list = new ArrayList<>();
+            
             List<UserProjectEntity> entities = userProjectRepository.findByProject(e);
             for(UserProjectEntity entity :entities){
-                members.add(entity.getUser().getUserName());
+
+                list.add(
+                        UserIdNameEmailRqDto.builder()
+                                .userId(entity.getUser().getId())
+                                .userName(entity.getUser().getUserName())
+                                .email(entity.getUser().getEmail())
+                                .build()
+                );
             }
 
-            ProjectDetailRsDto projectDetail = ProjectDetailRsDto.builder()
-                    .projectId(e.getProjectId())
-                    .projectTitle(e.getTitle())
-                    .done(e.isDone())
-                    .createDate(e.getCreateDate())
-                    .members(members)
-                    .memberCount(members.size())
+            UserIdNameEmailListRsDto members = UserIdNameEmailListRsDto.builder()
+                    .list(list)
                     .build();
+
+            ProjectDetailRsDto projectDetail = ProjectDetailRsDto.builder()
+                .projectId(e.getProjectId())
+                .projectTitle(e.getTitle())
+                .done(e.isDone())
+                .createDate(e.getCreateDate())
+//                    .members(members)
+                    .members(members)
+                .memberCount(list.size())
+                .build();
             projectDetailList.add(projectDetail);
         }
 
@@ -101,15 +114,26 @@ public class ProjectService {
     public ProjectInfoRsDto getProjectDetails(String projectId){
         ProjectEntity projectEntity = projectRepository.findById(projectId).orElseThrow();
 
-        List<String> members = new ArrayList<>();
+//        List<String> members = new ArrayList<>();
+        List<UserIdNameEmailRqDto> members = new ArrayList<>();
 
         List<UserProjectEntity> entities = userProjectRepository.findByProject(projectEntity);
         for(UserProjectEntity entity : entities){
-            members.add(entity.getUser().getUserName());
+//            members.add(entity.getUser().getUserName());
+            members.add(UserIdNameEmailRqDto.builder()
+                            .userId(entity.getId())
+                            .userName(entity.getUser().getUserName())
+                            .email(entity.getUser().getEmail())
+                            .build());
         }
+
+        UserIdNameEmailListRsDto userList = UserIdNameEmailListRsDto.builder()
+                .list(members)
+                .build();
 
         List<TodoRsDto> todos = new ArrayList<>();
         boolean todosStatus = true;
+        if(projectEntity.getTodos().size() == 0) todosStatus = false;
 
         for(TodoEntity todoEntity : projectEntity.getTodos()){
             List<LogRsDto> logs = new ArrayList<>();
@@ -159,7 +183,8 @@ public class ProjectService {
                 .content(projectEntity.getContents())
                 .done(projectEntity.isDone())
                 .createDate(projectEntity.getCreateDate())
-                .members(members)
+//                .members(members)
+                .members(userList)
                 .memberCount(members.size())
                 .todos(todos)
                 .build();
@@ -197,16 +222,7 @@ public class ProjectService {
         log.info("newProject - {}", newProject);
         log.info("user - {}", user);
 
-        // 작성자 본인을 멤버에 추가해야함
-        UserProjectEntity userProjectEntity2 = UserProjectEntity.builder()
-                .project(newProject)
-                .user(user)
-                .build();
-        userProjectRepository.save(userProjectEntity2);
-        userProjects.add(userProjectEntity2);
-
-        newProject.setUserProjects(userProjects);
-        projectRepository.save(newProject);
+        
 
 //        return getCurrentUserProjectInfo(projectCreateDTO.getUserId());
         return getCurrentUserProjectInfo(userId);

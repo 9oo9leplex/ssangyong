@@ -29,7 +29,8 @@ public class ProjectDetailRsDto {
 
     private LocalDateTime createDate;
 
-    private List<String> members;
+//    private List<String> members;
+    private UserIdNameEmailListRsDto members;
 
     private int memberCount;
 

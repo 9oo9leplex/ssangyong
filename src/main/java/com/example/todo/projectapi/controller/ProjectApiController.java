@@ -1,6 +1,7 @@
 package com.example.todo.projectapi.controller;
 
 import com.example.todo.projectapi.dto.request.ProjectCreateRqDto;
+import com.example.todo.projectapi.dto.response.ProjectDetailRsDto;
 import com.example.todo.projectapi.dto.response.ProjectInfoRsDto;
 import com.example.todo.projectapi.dto.response.ProjectListRsDto;
 import com.example.todo.projectapi.dto.response.UserIdNameEmailListRsDto;
@@ -14,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -30,14 +32,31 @@ public class ProjectApiController {
             @AuthenticationPrincipal String userId
     ) {
         log.info("/api/projects Get retrive() method!! - {}", userId);
-        List<UserProjectEntity> userList = projectService.getCurrentUserProjectList(userId);
-        ProjectListRsDto rsDto = projectService.getCurrentUserProjectInfo(userId);
+
+        List<ProjectDetailRsDto> list = new ArrayList<>();
+        ProjectListRsDto rsDto = ProjectListRsDto.builder()
+                .list(list)
+                .build();
+        try {
+            List<UserProjectEntity> userList = projectService.getCurrentUserProjectList(userId);
+            rsDto = projectService.getCurrentUserProjectInfo(userId);
+
+            return ResponseEntity.ok().body(rsDto);
+        }
+        catch (RuntimeException e){
+            rsDto.setErrorMsg(e.getMessage());
+
+            return ResponseEntity
+                    .ok()
+                    .body(rsDto);
+        }
+
 
         // 예외 처리
         // 참여 중인 프로젝트가 없다고 에러는 아님
         // httpstatus ok
         // errorMsg 가 있다면 그것을 출력, 없다면 리스트 출력
-        return ResponseEntity.ok().body(rsDto);
+
 
     }
 
